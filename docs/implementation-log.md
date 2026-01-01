@@ -42,7 +42,12 @@
 - Phase: Backend FULLY complete and tested
 - All Week 10-11 JDBC requirements met (100%)
 - Separated test file (DatabaseTest.java)
-- Stored procedures: GetMoviesByGenre (IN+ResultSet), CountMoviesByDirector (IN+OUT)
+- All 5 stored procedures implemented and tested:
+  * GetMoviesByGenre (IN + ResultSet)
+  * CountMoviesByDirector (IN + OUT)
+  * AddMovieWithValidation (IN + multiple OUT)
+  * GetAverageRatingByGenre (INOUT + multiple OUT)
+  * UpdateMovieRating (IN + OUT)
 - Frontend UI ready to be built
 
 ### Next Steps:
@@ -53,6 +58,7 @@
 - Fixed JdbcRowSet password issue (must pass credentials explicitly)
 - Using RowSetProvider factory for standard RowSet creation
 - CallableStatement uses varargs for generic procedure execution
+- Multiple OUT parameters returned using Map<String, Object> (simpler than custom classes)
 - All code follows simple // comment style per user preference
 
 ---

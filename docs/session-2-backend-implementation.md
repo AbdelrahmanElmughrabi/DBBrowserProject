@@ -126,10 +126,14 @@ All backend components tested and working:
 
 ---
 
-## Stored Procedures Implemented
+## Stored Procedures Implemented (All 5)
 - **GetMoviesByGenre** - IN parameter, returns ResultSet
 - **CountMoviesByDirector** - IN + OUT parameters
+- **AddMovieWithValidation** - IN parameters (title, year, genreId, directorId) + OUT parameters (success, message)
+- **GetAverageRatingByGenre** - INOUT parameter (genreId) + OUT parameters (avgRating, movieCount)
+- **UpdateMovieRating** - IN parameters (movieId, newRating) + OUT parameter (oldRating)
 - Generic methods support varargs for any procedure
+- Multiple OUT parameters returned via Map<String, Object>
 
 ## Notes
 - All JDBC operations follow proper resource management

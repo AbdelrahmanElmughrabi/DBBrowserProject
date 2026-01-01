@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.JdbcRowSet;
 
@@ -24,6 +25,8 @@ public class DatabaseTest {
         testRowSetFunctionality();
         System.out.println("\n\n");
         testStoredProcedures();
+        System.out.println("\n\n");
+        testAdvancedStoredProcedures();
     }
 
     // Comprehensive test of database layer
@@ -264,6 +267,64 @@ public class DatabaseTest {
             } catch (SQLException e) {
                 System.err.println("Error closing ResultSet: " + e.getMessage());
             }
+        }
+    }
+
+    // Test advanced stored procedures (multiple OUT parameters)
+    private static void testAdvancedStoredProcedures() {
+        try {
+            System.out.println("=== TESTING ADVANCED STORED PROCEDURES ===" );
+
+            // Connect to database
+            DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+            dbConnection.connect("jdbc:mysql://localhost:3306/moviedb", "root", "");
+
+            StoredProcedureExecutor spExecutor = new StoredProcedureExecutor();
+
+            // Test 1: AddMovieWithValidation (IN + multiple OUT)
+            System.out.println("=== TEST 1: AddMovieWithValidation ===");
+            System.out.println("Calling procedure: AddMovieWithValidation('Inception 2', 2025, 1, 1)");
+
+            Map<String, Object> validationResult = spExecutor.addMovieWithValidation(
+                "Inception 2", 2025, 1, 1
+            );
+
+            System.out.println("Result:");
+            System.out.println("  - Success: " + validationResult.get("success"));
+            System.out.println("  - Message: " + validationResult.get("message"));
+            System.out.println();
+
+            // Test 2: GetAverageRatingByGenre (INOUT + multiple OUT)
+            System.out.println("=== TEST 2: GetAverageRatingByGenre ===");
+            System.out.println("Calling procedure: GetAverageRatingByGenre(1)");
+
+            Map<String, Object> ratingResult = spExecutor.getAverageRatingByGenre(1);
+
+            System.out.println("Result:");
+            System.out.println("  - Genre ID: " + ratingResult.get("genreId"));
+            System.out.println("  - Average Rating: " + ratingResult.get("avgRating"));
+            System.out.println("  - Movie Count: " + ratingResult.get("movieCount"));
+            System.out.println();
+
+            // Test 3: UpdateMovieRating (IN + OUT)
+            System.out.println("=== TEST 3: UpdateMovieRating ===");
+            System.out.println("Calling procedure: UpdateMovieRating(1, 9.5)");
+
+            double oldRating = spExecutor.updateMovieRating(1, 9.5);
+
+            System.out.println("Result:");
+            System.out.println("  - Old Rating: " + oldRating);
+            System.out.println("  - New Rating: 9.5");
+            System.out.println();
+
+            System.out.println("=== ADVANCED STORED PROCEDURE TESTS COMPLETED ===");
+
+            // Disconnect
+            dbConnection.disconnect();
+
+        } catch (SQLException e) {
+            System.err.println("Advanced stored procedure test failed: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
