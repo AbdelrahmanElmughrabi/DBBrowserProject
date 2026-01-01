@@ -1,7 +1,7 @@
-# Session 2 - Backend Implementation (2025-12-30)
+# Session 2 - Backend Implementation (2025-12-30 to 2026-01-01)
 
 ## Overview
-Implemented complete database backend layer with all required JDBC components for Weeks 10-11.
+Implemented complete database backend layer with all required JDBC components for Weeks 10-11, including CallableStatement for stored procedures.
 
 ---
 
@@ -11,6 +11,7 @@ Implemented complete database backend layer with all required JDBC components fo
 - **DatabaseConnection** - Singleton pattern for connection management
 - **DatabaseMetadataHelper** - Retrieves table/column metadata
 - **QueryExecutor** - Executes all CRUD operations
+- **StoredProcedureExecutor** - Executes stored procedures with CallableStatement
 - **Model Classes** - ColumnMetadata, TableRecord
 
 ### 2. **RowSet Implementation** (Week 11)
@@ -24,6 +25,7 @@ Implemented complete database backend layer with all required JDBC components fo
 - **DatabaseTest** - Standalone test class
   - Tests all database operations
   - Tests RowSet functionality
+  - Tests stored procedures (CallableStatement)
   - Validates RowSetListener events
 
 ---
@@ -35,6 +37,7 @@ Implemented complete database backend layer with all required JDBC components fo
 - Connection (`DriverManager.getConnection`)
 - Statement (static SQL execution)
 - PreparedStatement (parameterized queries)
+- **CallableStatement** (stored procedures)
 - ResultSet (query results processing)
 
 ### Week 11 Requirements ✓
@@ -55,6 +58,7 @@ database/
   ├── DatabaseConnection.java ✓
   ├── DatabaseMetadataHelper.java ✓
   ├── QueryExecutor.java ✓
+  ├── StoredProcedureExecutor.java ✓
   ├── RowSetManager.java ✓
   └── RowSetOperations.java ✓
 
@@ -122,8 +126,14 @@ All backend components tested and working:
 
 ---
 
+## Stored Procedures Implemented
+- **GetMoviesByGenre** - IN parameter, returns ResultSet
+- **CountMoviesByDirector** - IN + OUT parameters
+- Generic methods support varargs for any procedure
+
 ## Notes
 - All JDBC operations follow proper resource management
 - Singleton pattern ensures single connection instance
 - Generic design works with any MySQL database
 - RowSet password handling fixed for JdbcRowSet creation
+- CallableStatement supports both specific and generic procedure execution

@@ -5,6 +5,7 @@ import database.DatabaseMetadataHelper;
 import database.QueryExecutor;
 import database.RowSetManager;
 import database.RowSetOperations;
+import database.StoredProcedureExecutor;
 import listeners.TableDataListener;
 import models.ColumnMetadata;
 import java.sql.ResultSet;
@@ -21,6 +22,8 @@ public class DatabaseTest {
         testDatabaseLayer();
         System.out.println("\n\n");
         testRowSetFunctionality();
+        System.out.println("\n\n");
+        testStoredProcedures();
     }
 
     // Comprehensive test of database layer
@@ -191,6 +194,75 @@ public class DatabaseTest {
                 if (cachedRowSet != null) cachedRowSet.close();
             } catch (SQLException e) {
                 System.err.println("Error closing RowSets: " + e.getMessage());
+            }
+        }
+    }
+
+    // Test stored procedures with CallableStatement
+    private static void testStoredProcedures() {
+        ResultSet rs = null;
+
+        try {
+            System.out.println("=== TESTING STORED PROCEDURES ===");
+
+            // Connect to database
+            DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+            dbConnection.connect("jdbc:mysql://localhost:3306/moviedb", "root", "");
+
+            StoredProcedureExecutor spExecutor = new StoredProcedureExecutor();
+
+            // Test 1: GetMoviesByGenre (IN parameter, returns ResultSet)
+            System.out.println("=== TEST 1: GetMoviesByGenre ===");
+            System.out.println("Calling procedure: GetMoviesByGenre('Action')");
+
+            rs = spExecutor.getMoviesByGenre("Action");
+
+            // Display results
+            ResultSetMetaData rsMetaData = rs.getMetaData();
+            int columnCount = rsMetaData.getColumnCount();
+
+            System.out.print("Columns: ");
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.print(rsMetaData.getColumnName(i));
+                if (i < columnCount) System.out.print(", ");
+            }
+            System.out.println();
+
+            int rowCount = 0;
+            while (rs.next()) {
+                System.out.print("  Movie " + (rowCount + 1) + ": ");
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(rs.getString(i));
+                    if (i < columnCount) System.out.print(" | ");
+                }
+                System.out.println();
+                rowCount++;
+            }
+            System.out.println("Total Action movies: " + rowCount + "\n");
+            rs.close();
+
+            // Test 2: CountMoviesByDirector (IN + OUT parameters)
+            System.out.println("=== TEST 2: CountMoviesByDirector ===");
+            System.out.println("Calling procedure: CountMoviesByDirector('Nolan')");
+
+            int movieCount = spExecutor.countMoviesByDirector("Nolan");
+
+            System.out.println("Movies directed by Nolan: " + movieCount + "\n");
+
+            System.out.println("=== STORED PROCEDURE TESTS COMPLETED ===");
+
+            // Disconnect
+            dbConnection.disconnect();
+
+        } catch (SQLException e) {
+            System.err.println("Stored procedure test failed: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Close ResultSet
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing ResultSet: " + e.getMessage());
             }
         }
     }

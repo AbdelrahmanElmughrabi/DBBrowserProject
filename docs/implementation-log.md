@@ -19,7 +19,7 @@
 
 ---
 
-## Session 2 - Backend Database Layer (2025-12-30)
+## Session 2 - Backend Database Layer (2025-12-30 to 2026-01-01)
 
 ### Focus: Complete JDBC Backend Implementation
 
@@ -31,25 +31,28 @@
 - RowSetManager (JdbcRowSet, CachedRowSet)
 - TableDataListener (RowSetListener implementation)
 - RowSetOperations (navigation and update utilities)
-- DatabaseTest (comprehensive testing)
+- StoredProcedureExecutor (CallableStatement for stored procedures)
+- DatabaseTest (comprehensive testing for all components)
 
 ### JDBC Concepts Applied:
-- Week 10: Driver, Connection, Statement, PreparedStatement, ResultSet
+- Week 10: Driver, Connection, Statement, PreparedStatement, CallableStatement, ResultSet
 - Week 11: DatabaseMetaData, ResultSetMetaData, Scrollable/Updatable ResultSets, RowSet, RowSetListener
 
 ### Current Status:
-- Phase: Backend complete and tested
-- All Week 10-11 JDBC requirements met
+- Phase: Backend FULLY complete and tested
+- All Week 10-11 JDBC requirements met (100%)
 - Separated test file (DatabaseTest.java)
+- Stored procedures: GetMoviesByGenre (IN+ResultSet), CountMoviesByDirector (IN+OUT)
 - Frontend UI ready to be built
 
 ### Next Steps:
-- Optional: Add CallableStatement, transactions, batch operations
+- Optional: Add transactions, batch operations
 - Required: Build JavaFX UI layer (connection dialog, table view, CRUD forms)
 
 ### Notes:
 - Fixed JdbcRowSet password issue (must pass credentials explicitly)
 - Using RowSetProvider factory for standard RowSet creation
+- CallableStatement uses varargs for generic procedure execution
 - All code follows simple // comment style per user preference
 
 ---
