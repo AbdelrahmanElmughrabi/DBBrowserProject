@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.MainViewController">
+
+    <left>
+        <VBox spacing="10" prefWidth="260">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label text="Tables" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <ListView fx:id="tableListView" VBox.vgrow="ALWAYS"/>
+
+            <Button text="Display Contents" onAction="#handleDisplayContents" maxWidth="1.7976931348623157E308"/>
+            <Button text="Custom Query" onAction="#handleCustomQuery" maxWidth="1.7976931348623157E308"/>
+
+            <Separator/>
+            <Button text="Disconnect" onAction="#handleDisconnect" maxWidth="1.7976931348623157E308"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentPane" >
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label text="Select a table, then click Display Contents — or use Custom Query."
+                   style="-fx-font-size: 13px;"/>
+        </StackPane>
+    </center>
 
 </BorderPane>

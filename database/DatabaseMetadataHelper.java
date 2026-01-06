@@ -26,9 +26,9 @@ public class DatabaseMetadataHelper {
         try {
             // Get DatabaseMetaData from connection
             DatabaseMetaData metaData = connection.getMetaData();
-
+            String catalog = connection.getCatalog();
             // Get tables of type "TABLE" (excludes views, system tables)
-            rs = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+            rs = metaData.getTables(catalog, null, "%", new String[]{"TABLE"});
 
             // Process ResultSet
             while (rs.next()) {
@@ -55,10 +55,10 @@ public class DatabaseMetadataHelper {
         try {
             // Get DatabaseMetaData
             DatabaseMetaData metaData = connection.getMetaData();
-
+            String catalog = connection.getCatalog();
             // Get primary key columns for this table
             List<String> primaryKeys = new ArrayList<>();
-            pkRs = metaData.getPrimaryKeys(null, null, tableName);
+            pkRs = metaData.getPrimaryKeys(catalog, null, tableName);
             while (pkRs.next()) {
                 primaryKeys.add(pkRs.getString("COLUMN_NAME"));
             }
@@ -99,9 +99,9 @@ public class DatabaseMetadataHelper {
         try {
             // Get DatabaseMetaData
             DatabaseMetaData metaData = connection.getMetaData();
-
+            String catalog = connection.getCatalog();
             // Get primary keys
-            rs = metaData.getPrimaryKeys(null, null, tableName);
+            rs = metaData.getPrimaryKeys(catalog, null, tableName);
 
             // Return first primary key found
             if (rs.next()) {
