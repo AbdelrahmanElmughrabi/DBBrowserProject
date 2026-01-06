@@ -4,8 +4,11 @@ import database.DatabaseConnection;
 import database.DatabaseMetadataHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import utils.AlertHelper;
 import views.CustomQueryPane;
 import views.TableBrowserPane;
@@ -60,10 +63,18 @@ public class MainViewController {
     public void handleDisconnect(ActionEvent event) {
         try {
             DatabaseConnection.getInstance().disconnect();
-            AlertHelper.showInfo("Disconnected", "Database connection closed.");
-            // optional: go back to connect screen
+
+            // Load connection view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ConnectionView.fxml"));
+            Scene scene = new Scene(loader.load(), 520, 220);
+            Stage stage = (Stage) tableListView.getScene().getWindow();
+            stage.setTitle("DB Browser - Project 4");
+            stage.setScene(scene);
+
         } catch (SQLException e) {
             AlertHelper.showError("Disconnect Error", e.getMessage());
+        } catch (Exception e) {
+            AlertHelper.showError("Navigation Error", e.getMessage());
         }
     }
 }

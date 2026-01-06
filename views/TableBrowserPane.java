@@ -38,15 +38,17 @@ public class TableBrowserPane extends BorderPane {
         Label title = new Label("Table: " + tableName);
         title.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
+        Button refreshBtn = new Button("Refresh");
         Button addBtn = new Button("Add New");
         Button updateBtn = new Button("Update Selected");
         Button deleteBtn = new Button("Delete Selected");
 
+        refreshBtn.setOnAction(e -> refreshTable());
         addBtn.setOnAction(e -> insertRecord());
         updateBtn.setOnAction(e -> updateSelected());
         deleteBtn.setOnAction(e -> deleteSelected());
 
-        HBox buttons = new HBox(10, addBtn, updateBtn, deleteBtn);
+        HBox buttons = new HBox(10, refreshBtn, addBtn, updateBtn, deleteBtn);
 
         VBox top = new VBox(10, title, buttons);
         top.setPadding(new Insets(0, 0, 10, 0));

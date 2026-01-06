@@ -13,6 +13,7 @@ import utils.AlertHelper;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,13 +52,30 @@ public class CustomQueryPane extends BorderPane {
 
         try {
             QueryExecutor executor = new QueryExecutor();
+            String sqlLower = sql.toLowerCase().trim();
 
-            // If user writes SELECT -> show table results
-            if (sql.toLowerCase().startsWith("select")) {
+            // For SELECT -> always has ResultSet
+            if (sqlLower.startsWith("select")) {
                 ResultSet rs = executor.executeQuery(sql);
                 buildTableFromResultSet(rs);
                 rs.close();
-            } else {
+            }
+            // For CALL -> may or may not have ResultSet
+            else if (sqlLower.startsWith("call")) {
+                try {
+                    ResultSet rs = executor.executeQuery(sql);
+                    buildTableFromResultSet(rs);
+                    rs.close();
+                } catch (SQLException e) {
+                    // No ResultSet, just OUT parameters
+                    AlertHelper.showInfo("Procedure Executed",
+                        "Procedure completed.\nNote: OUT parameters (@variables) must be queried separately:\nSELECT @success, @msg;");
+                    tableView.getItems().clear();
+                    tableView.getColumns().clear();
+                }
+            }
+            // For INSERT, UPDATE, DELETE
+            else {
                 int affected = executor.executeUpdate(sql);
                 AlertHelper.showInfo("Query Executed", "Rows affected: " + affected);
                 tableView.getItems().clear();
